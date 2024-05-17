@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Header with Cart and Navigation</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+.custom-alert {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.custom-alert-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: slideIn 0.3s ease-in-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, -60%);
+    }
+    to {
+        transform: translate(-50%, -50%);
+    }
+}
+
+.custom-alert-content span {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px; /* Add margin below the text */
+}
+
+.custom-alert-content button {
+    display: block; /* Make the button a block-level element */
+    margin: 20px auto 0; /* Center the button horizontally and add margin on top */
+    padding: 10px 25px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.custom-alert-content button:hover {
+    background-color: #0056b3;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Ensure body has a relative position */
+}
+
+/* Resetting margins and paddings for all elements */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+  header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: box-shadow 0.3s;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  z-index: 1000; /* Ensure header appears above other content */
+}
+
+  header:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  } 
+
+  .logo {
+    font-weight: bold;
+    font-size: 24px;
+  }
+
+  nav {
+    display: flex;
+    gap: 10px; /* Changed gap value to make spaces smaller */
+  }
+
+  nav a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Changed font */
+  }
+
+  .nav-link {
+    position: relative;
+    font-size: 16px;
+    font-weight: bold;
+    transition: color 0.3s, background-color 0.3s;
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: #333;
+  }
+
+  .nav-link:hover {
+    color: white;
+    background-color: #007bff;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #007bff;
+    transition: width 0.3s ease;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .icon-container {
+    display: flex;
+    gap: 10px; /* Adjust gap between icons */
+  }
+
+  .cart-icon {
+    color: #333;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: color 0.3s, background-color 0.3s;
+    border-radius: 10px; /* Adding border-radius for curved edges */
+  }
+
+  .cart-icon::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; /* Adjusting position for space between underline and icons */
+    left: 0; /* Initially aligned with the left edge of the icon */
+    width: 0%;
+    height: 2px;
+    background-color: #007bff;
+    transition: width 0.3s ease, left 0.3s ease; /* Adding left transition for animation */
+  }
+
+  .icon-container:hover .cart-icon:hover::after {
+    width: 80%;
+    left: 10%; /* Move underline to the left to align with the icon */
+  }
+
+  .cart-icon:hover::after {
+    width: 100%;
+  }
+
+  .cart-icon:hover {
+    color: white;
+    background-color: #007bff;
+  }
+
+  .cart-notification {
+    background-color: red;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .user-icon {
+  color: #333;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: color 0.3s, background-color 0.3s;
+  border-radius: 10px; /* Adding border-radius for curved edges */
+  z-index: 1100; /* Ensure the user icon appears above the header background */
+}
+
+  .user-icon::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; /* Adjusting position for space between underline and icons */
+    left: 0; /* Initially aligned with the left edge of the icon */
+    width: 0%;
+    height: 2px;
+    background-color: #007bff;
+    transition: width 0.3s ease, left 0.3s ease; /* Adding left transition for animation */
+  }
+
+  .icon-container:hover .user-icon:hover::after {
+    width: 80%;
+    left: 10%; /* Move underline to the left to align with the icon */
+  }
+
+  .user-icon:hover::after {
+    width: 100%;
+  }
+
+  .user-icon:hover {
+    color: white;
+    background-color: #007bff;
+  }
+
+  .icon-container:hover .cart-icon:hover,
+  .icon-container:hover .user-icon:hover {
+    background-color: #007bff;
+  }
+
+  .cart-container {
+  position: fixed;
+  width: 35%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  background-color: #f0f0f0;
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  display: none;
+  animation: slideInRight 0.3s ease forwards;
+  overflow-y: auto; /* Add scrollbar if content exceeds height */
+  z-index: 2000; /* Set a higher z-index */
+}
+
+.cart-product {
+    display: none;
+    align-items: flex-start; /* Adjust alignment to flex-start */
+    padding: 20px; /* Increase padding for better spacing */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    margin: 30px 0;
+    position: relative;
+}
+
+.cart-container .cart-product {
+    display: flex;
+    flex-wrap: wrap; /* Allow product details to wrap */
+}
+
+.cart-product img {
+    max-width: 100px; /* Increase image size */
+    height: auto;
+    margin-right: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column; /* Change flex direction to column */
+}
+
+.product-name {
+    margin: 0;
+    margin-bottom: 10px; /* Adjust margin */
+    font-size: 18px; /* Increase font size */
+    font-weight: bold;
+}
+
+.product-description {
+    margin: 0;
+    margin-bottom: 15px; /* Adjust margin */
+    font-size: 16px; /* Adjust font size */
+    color: #555; /* Darken text color */
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px; /* Adjust margin */
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 8px;
+    width: fit-content;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.quantity-btn {
+    background-color: #f8f9fa;
+    border: none;
+    color: #212529;
+    cursor: pointer;
+    padding: 8px 15px;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin: 0 5px;
+    outline: none;
+}
+
+.quantity-btn:hover {
+    background-color: #e9ecef;
+}
+
+.quantity-value {
+    font-size: 16px;
+    margin: 0 10px;
+}
+
+.product-price {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+/* Style for remove button */
+
+.remove-item,
+.buy-cart {
+    width: 130px; /* Adjust button width */
+    display: inline-block;
+    cursor: pointer;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    border: 1px solid transparent;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin-top: 10px; /* Add margin between buttons */
+    font-weight: bold; /* Make text bold */
+    float: right; /* Align buttons to the right */
+}
+
+.remove-item {
+    background-color: #dc3545;
+    color: white;
+}
+
+.buy-cart {
+    background-color: #007bff;
+    color: white;
+}
+
+.remove-item:hover,
+.buy-cart:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.remove-item:active,
+.buy-cart:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+.remove-item:focus,
+.buy-cart:focus {
+    outline: none;
+}
+
+.remove-item:disabled,
+.buy-cart:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Style for close button */
+.close-button {
+            background-color: #007bff;
+            color: white;
+            width: 130px; /* Adjust button width */
+            display: inline-block;
+            cursor: pointer;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.25rem;
+            border: 1px solid transparent;
+            transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            font-weight: bold; /* Make text bold */
+            position: absolute; /* Align button to the top right */
+            top: 10px;
+            right: 10px;
+            margin-bottom: 30px; /* Add margin under the button */
+        }
+
+        .close-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-color: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-button:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+        .close-button:focus {
+            outline: none;
+        }
+
+        .close-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+.user-container {
+            position: fixed;
+            width: 20%;
+            height: 40%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f0f0f0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            display: none;
+            animation: fadeDown 0.3s ease forwards;
+        }
+        .email-input-container {
+            margin-top: 40px;
+        }
+
+        /* Style for email label */
+        .email-label {
+          margin: 0; /* Remove default margin */
+  font-size: 20px; /* Larger font size for product name */
+  color: #333; /* Dark text color */
+  font-weight: bold; /* Make the product name bold */
+  text-transform: capitalize; /* Capitalize the product name */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle text shadow */
+        }
+
+        .email-input {
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: block; /* Ensure input field takes full width */
+    margin: 10px auto; /* Center the input field horizontally */
+    box-sizing: border-box; /* Include padding and border in the width calculation */
+}
+
+        .save-button {
+    background-color: #007bff;
+    color: white;
+    width: 130px; /* Adjust button width */
+    display: block; /* Change display to block */
+    cursor: pointer;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    border: 1px solid transparent;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    font-weight: bold; /* Make text bold */
+    margin: 10px auto; /* Set top and bottom margin to 10px, and auto for left and right margins to center it */
+}
+
+        .save-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-color: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .save-button:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+        .save-button:focus {
+            outline: none;
+        }
+
+        .save-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Existing animations for containers */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeDown {
+    from {
+        transform: translate(-50%, -70%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+
+/* Enhanced Home Section Styles */
+.home-section {
+    background-color: white; /* White background */
+    color: #333333; /* Dark text color */
+    padding: 100px 0; /* Adjust padding for better appearance */
+    position: relative; /* Set position relative for overlay content */
+    text-align: center; /* Center align content */
+}
+
+.home-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 60px;
+}
+
+.home-content-text {
+    flex: 1;
+}
+
+.home-content-image {
+    flex: 1;
+    margin-left: 20px; /* Adjusted margin */
+}
+
+.home-content-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: transform 0.3s ease; /* Smooth transition */
+}
+
+.home-content-image img:hover {
+    transform: scale(1.05); /* Scale up on hover */
+}
+
+.home-section h2 {
+    font-size: 60px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif; /* Use Arial font */
+    text-transform: uppercase; /* Uppercase text */
+    color: #333333; /* Black text color */
+    z-index: 1; /* Ensure text is above overlay */
+}
+
+.home-section h2 span {
+    color: #007bff; /* Blue color for span */
+}
+
+.home-section p {
+    font-size: 20px;
+    margin-bottom: 40px;
+    font-family: 'Arial', sans-serif; /* Use Arial font */
+    line-height: 1.6; /* Increase line height for better readability */
+    color: #555; /* Slightly darker text color */
+    z-index: 1; /* Ensure text is above overlay */
+}
+
+/* Button Styles */
+.shop,
+.discover {
+    width: 140px; 
+    height: 50px;
+    display: inline-block;
+    cursor: pointer;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    border: 1px solid transparent;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin-top: 10px; /* Add margin between buttons */
+    font-weight: bold; /* Make text bold */
+    align-items: center;
+}
+
+.shop {
+    background-color: #007bff;
+    color: white;
+}
+
+.discover {
+    background-color: #007bff;
+    color: white;
+}
+
+.shop:hover,
+.discover:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.shop:active,
+.discover:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+.shop:focus,
+.discover:focus {
+    outline: none;
+}
+
+.shop:disabled,
+.discover:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Feature List */
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.feature-item {
+    flex: 0 0 calc(33.33% - 20px); /* Adjust width for responsiveness */
+    background-color: white; /* White background */
+    border-radius: 10px;
+    padding: 30px;
+    margin: 20px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: transform 0.3s ease; /* Smooth transition */
+}
+
+.feature-item:hover {
+    transform: translateY(-10px); /* Move up slightly on hover */
+}
+
+.feature-item h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #007bff; /* Blue color for heading */
+}
+
+.feature-item p {
+    font-size: 18px;
+    color: #555; /* Slightly darker text color */
+    line-height: 1.6;
+}
+
+.divider{
+  height: 200px;
+}
+
+
+
+
+      /* About us starts */
+      .about .row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding: 2rem 0;
+      padding-bottom: 3rem;
+      }
+      .about .row .video-container {
+      flex: 1 1 25.5rem;
+      position: relative;
+      }
+      .about .row .video-container video {
+      width: 100%;
+      border: 1.5rem solid #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+      height: 100%;
+      object-fit: cover;
+      }
+      .about .row .video-container h3 {
+      position: absolute;
+      top: 43%;
+      left: 50%;
+      transform: translate(-50%, -50%); 
+      font-size: 3rem;
+      background: #fff;
+      width: 100%;
+      padding: 1rem 2rem;
+      text-align: center;
+      mix-blend-mode: screen;
+      }
+
+.about .row .content {
+    flex: 1 1 40rem; /* Set a fixed width for the content container */
+    padding: 3.5rem; /* Increased padding for better spacing */
+    border-radius: 10px; /* Rounded corners */
+    margin-top: 2rem; /* Added margin top to separate from video container */
+}
+
+.about .row .content h3 {
+    font-size: 2.5rem; /* Slightly reduced font size */
+    color: #007bff; /* Lighter blue color */
+    margin-bottom: 1rem; /* Added margin bottom for separation */
+}
+
+.about .row .content p {
+    font-size: 1.3rem; /* Slightly reduced font size */
+    color: #555; /* Darker text color */
+    line-height: 1.6; /* Increased line height for better readability */
+    margin-bottom: 1rem; /* Added margin bottom for separation */
+}
+
+.hover-box {
+    display: inline-block;
+    padding: 20px;
+    background-color: #ffffff; /* White background */
+    border: 2px solid #007bff; /* Border color matches background color */
+    border-radius: 10px; /* Rounded corners */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Adjusted width to fill the container */
+}
+
+.hover-box:hover {
+    transform: translateY(-5px); /* Adjusted scale to translateY */
+    box-shadow: 0 8px 16px rgba(0, 123, 255, 0.2); /* Increased shadow for depth */
+}
+
+.about .row .content h3 {
+    font-size: 2.5rem; /* Slightly reduced font size */
+    color: #007bff; /* Lighter blue color */
+    margin-bottom: 1rem; /* Added margin bottom for separation */
+}
+
+.about .row .content p {
+    font-size: 1.3rem; /* Slightly reduced font size */
+    color: #555; /* Darker text color */
+    line-height: 1.6; /* Increased line height for better readability */
+    margin-bottom: 1rem; /* Added margin bottom for separation */
+}
+
+.hover-box {
+    display: inline-block;
+    padding: 20px;
+    background-color: #ffffff; /* White background */
+    border: 2px solid #007bff; /* Border color matches background color */
+    border-radius: 10px; /* Rounded corners */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Adjusted width to fill the container */
+}
+
+.hover-box:hover {
+    transform: translateY(-5px); /* Adjusted scale to translateY */
+    box-shadow: 0 8px 16px rgba(0, 123, 255, 0.2); /* Increased shadow for depth */
+}
+      /* About us ends */
+
+  /*body (shop)*/
+/* Product containers */
+.product-container {
+  margin: 20px auto;
+  width: 60%;
+  border: 0.5px solid #007bff;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.product-container:hover {
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+  .product {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .product-info img {
+  width: 80px;
+  height: auto;
+  margin-right: 20px;
+  border-radius: 10px; /* Rounded corners for product image */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for image */
+}
+
+.product-info h3 {
+  margin: 0; /* Remove default margin */
+  font-size: 20px; /* Larger font size for product name */
+  color: #333; /* Dark text color */
+  font-weight: bold; /* Make the product name bold */
+  text-transform: capitalize; /* Capitalize the product name */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle text shadow */
+}
+
+.product-info p {
+  margin: 5px 0; /* Adjust margin */
+  color: #666; /* Slightly darker text color */
+  font-size: 16px; /* Font size for product price */
+  font-weight: bold; /* Make the product price bold */
+}
+
+.category {
+  margin-bottom: 40px;
+}
+
+.category-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #007bff; /* Add your preferred color */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.description {
+  margin-top: 10px; /* Add margin between product price and description */
+}
+
+.description p {
+  margin: 5px 0; /* Adjust margin */
+  color: #666; /* Slightly darker text color */
+}
+
+.rating-container {
+  margin-top: 5px; /* Add margin between description and rating */
+}
+
+/* Search bar */
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px; /* Increased margin for more length */
+  padding: 10px; /* Added padding for better spacing */
+  border-radius: 20px; /* Rounded corners */
+}
+
+.search-input {
+  padding: 10px 15px; /* Increased padding */
+  border: 2px solid #007bff;
+  border-radius: 20px;
+  outline: none;
+  width: 300px; /* Increased width for longer search input */
+}
+
+.search-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px; /* Increased padding */
+  margin-left: 10px; /* Adjusted margin for better spacing */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Added transition for smooth effect */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05); /* Hover effect - slightly scale up */
+}
+
+
+/* CSS for stars */
+.star {
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  color: #ccc; /* Default star color (gray) */
+  cursor: pointer;
+  outline: none;
+  transition: color 0.3s; /* Transition effect for color change */
+}
+
+.star:hover,
+.star:focus {
+  color: #ffcc00; /* Star color on hover/focus */
+}
+
+/* Party animation */
+.party {
+  animation: party 0.5s ease-in-out;
+}
+
+@keyframes party {
+  0% { transform: rotate(0); }
+  20% { transform: rotate(-15deg); }
+  40% { transform: rotate(15deg); }
+  60% { transform: rotate(-10deg); }
+  80% { transform: rotate(10deg); }
+  100% { transform: rotate(0); }
+}
+
+.add-to-cart,
+.buy-product {
+  width: 140px;
+  display: block;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease, border-radius 0.3s ease;
+  outline: none;
+  margin-bottom: 10px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-to-cart:hover,
+.buy-product:hover {
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 6px;
+}
+
+.add-to-cart:active,
+.buy-product:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.add-to-cart:focus,
+.buy-product:focus {
+  outline: none;
+}
+
+.add-to-cart:disabled,
+.buy-product:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+      /* Footer Styles starts */
+      .ocean {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  margin-bottom: 280px; /* Adjust this value as needed */
+  margin-top: 20px; /* Adjust margin-top as per your design */
+}
+
+    .wave-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 2; /* Ensure .wave-container is in front of waves */
+
+    }
+    
+    .wave-content {
+      position: absolute;
+      bottom: 50px; /* Adjust as needed */
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: white;
+      z-index: 3; /* Ensure .wave-content is in front of .wave-container */
+    }
+    
+    .wave-content h2 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    
+    .wave-content p {
+      font-size: 1.2em;
+      margin-bottom: 0.5px;
+    }
+    
+    .contact-icons {
+  margin-bottom: 20px;
+  text-align: center; /* Center align the icons */
+}
+
+.contact-info {
+  text-align: center; /* Center align the contact information */
+  margin-top: 20px; /* Add some margin on top */
+}
+
+.contact-info p {
+  font-size: 1em;
+  margin-bottom: 10px; /* Increase margin-bottom for better spacing */
+}
+
+.contact-info p i {
+  margin-right: 10px;
+}
+
+/* Icons */
+.fa {
+  font-size: 1.2em;
+  margin-right: 5px;
+}
+
+
+    .footerbuttons {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 1px solid white;
+      color: white;
+      text-decoration: none;
+      transition: background-color 0.3s, color 0.3s, transform 0.2s;
+      margin: 10px;
+      border-radius: 20px; /* Adjust the border-radius as per your preference */
+    }
+    
+    .footerbuttons:hover {
+      background-color: white;
+      color: rgb(53, 134, 255);
+      transform: translateY(-2px);
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .blue-cover {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 280px; /* This should match the margin-bottom of .ocean */
+      background-color: rgb(53, 134, 255);
+      z-index: 1; /* Ensure it's below the waves and .wave-container */
+    }
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/394550135_7531271790222842_3145120125849210271_n.png?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGtRFY9GrMAUtcsuxDDmPMFAabgYfmkVSsBpuBh-aRVK6fJG_tjttg1TGClxew_4v7AgoBDyid4dPfjdaKhLQqB&_nc_ohc=SU_kyscLnT8Q7kNvgHbH3sZ&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_Q7cD1QFrMGYW_sxzhFvYPIkb2WAac4_EG0veqvZCW9jaEhcjXg&oe=666D8564');
+  background-size: 1000px 100px;
+  animation: animateWave1 4s steps(1000) infinite;
+  z-index: 0;
+  opacity: 1;
+  height: 100px;
+}
+
+.wave2 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/394550135_7531271790222842_3145120125849210271_n.png?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGtRFY9GrMAUtcsuxDDmPMFAabgYfmkVSsBpuBh-aRVK6fJG_tjttg1TGClxew_4v7AgoBDyid4dPfjdaKhLQqB&_nc_ohc=SU_kyscLnT8Q7kNvgHbH3sZ&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_Q7cD1QFrMGYW_sxzhFvYPIkb2WAac4_EG0veqvZCW9jaEhcjXg&oe=666D8564');
+  background-size: 1000px 100px;
+  animation: animateWave2 4s steps(1000) infinite;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+.wave3 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/394550135_7531271790222842_3145120125849210271_n.png?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGtRFY9GrMAUtcsuxDDmPMFAabgYfmkVSsBpuBh-aRVK6fJG_tjttg1TGClxew_4v7AgoBDyid4dPfjdaKhLQqB&_nc_ohc=SU_kyscLnT8Q7kNvgHbH3sZ&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_Q7cD1QFrMGYW_sxzhFvYPIkb2WAac4_EG0veqvZCW9jaEhcjXg&oe=666D8564');
+  background-size: 1000px 100px;
+  animation: animateWave3 3s steps(1000) infinite;
+  z-index: -2;
+  opacity: 0.3;
+}
+
+.wave4 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/394550135_7531271790222842_3145120125849210271_n.png?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGtRFY9GrMAUtcsuxDDmPMFAabgYfmkVSsBpuBh-aRVK6fJG_tjttg1TGClxew_4v7AgoBDyid4dPfjdaKhLQqB&_nc_ohc=SU_kyscLnT8Q7kNvgHbH3sZ&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_Q7cD1QFrMGYW_sxzhFvYPIkb2WAac4_EG0veqvZCW9jaEhcjXg&oe=666D8564');
+  background-size: 1000px 100px;
+  animation: animateWave4 3s steps(1000) infinite;
+  z-index: -3;
+  opacity: 0.7;
+}
+
+@keyframes animateWave1 {
+  0% { background-position: 0px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes animateWave2 {
+  0% { background-position: 0px 0; }
+  100% { background-position: -1000px 0; }
+}
+
+@keyframes animateWave3 {
+  0% { background-position: 0px 0; }
+  100% { background-position: 800px 0; }
+}
+
+@keyframes animateWave4 {
+  0% { background-position: 0px 0; }
+  100% { background-position: -1200px 0; }
+}
+      /* Footer Styles ends */
+
+
+
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Mart</div>
+    <nav>
+      <a href="#home-section" class="nav-link"><i class="fas fa-home"></i> Home</a> 
+      <a href="#Features-section" class="nav-link"><i class="fas fa-server"></i> Features</a>
+      <a href="#about-section" class="nav-link"><i class="fas fa-info-circle"></i> About</a>
+    </nav>
+    <div class="icon-container">
+
+      <div class="cart-icon" id="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <div class="cart-notification" id="cart-notification">0</div>
+      </div>
+      <div class="user-icon" id="user-icon">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="user-icon" id="user-icon">
+        <!--Remove (bugged)-->
+      </div>
+    </div>
+  <div class="cart-container" id="cart-container">
+    <!-- Content for the cart container -->
+    hahahaha missu
+    <button class="close-button" id="cart-close-button">Close</button>
+</div>
+
+<div class="user-container" id="user-container">
+  <!-- Content for the user container -->
+  <div id="user-content">
+      <div class="email-input-container">
+        <label for="email-input" class="email-label">Your Email:</label>
+          <input type="email" id="email-input" class="email-input" placeholder="Enter your email" value="">
+          <button class="save-button" id="save-button">Save Email</button>
+      </div>
+  </div>
+  <button class="close-button" id="user-close-button">Close</button>
+</div>
+
+  </header>
+
+<!-- home us section starts -->
+<section class="home-section" id="home-section">
+    <div class="container">
+        <div class="home-content">
+            <div class="home-content-text">
+                <h2>Welcome to Our <span>Crochet Wonderland</span></h2>
+                <p class="lead">Indulge in the artistry of crochet at Crochet Haven. Let us (pano makalimot hahahah) weave a tapestry of warmth and beauty into your world.</p>
+                <button class="btn btn-primary btn-lg shop" onclick="scrollToShopSection()">Shop Now!</button>
+                <button class="btn btn-primary btn-lg discover" onclick="scrollToFooter()">Contact Us!</button>
+            </div>
+            <div class="home-content-image">
+                <img src="https://via.placeholder.com/400">
+            </div>
+        </div>
+    </div>
+    <div class="divider" id="Features-section">
+    <img src="https://scontent.fmnl30-3.fna.fbcdn.net/v/t1.15752-9/441030202_991451078494960_7917204476702131786_n.png?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFWGZQ9qduOkVLndn3RrDn1K-etbaHzs5Ir561tofOzkpzPhG710bJNfZc7UKn-juyXlRi6eQbg4GcscynLVUgw&_nc_ohc=CXJEJZ87DpwQ7kNvgH748wD&_nc_ht=scontent.fmnl30-3.fna&oh=03_Q7cD1QEq9-jOOtpSMr_k88Nb8j-KHRIXLUSKuMvAlA03HilMig&oe=6666FD9F" alt="Divider Image" style="width: 100%;">
+</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" >
+                <h2 style="color: #007bff; text-align: center;">Our Features</h2>
+            </div>
+        </div>
+        <div class="row features">
+            <div class="col-md-4">
+                <div class="feature-item">
+                    <h3>Lorem ipsum</h3>
+                    <p>hahahahha sakit.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-item">
+                    <h3>Lorem ipsum</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-item">
+                    <h3>Lorem ipsum</h3>
+                    <p>Musta kyo guys?</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+              <div class="feature-item">
+                  <h3>Lorem ipsum</h3>
+                  <p>Mark check pm maya ah</p>
+              </div>
+          </div>
+        </div>
+    </div>
+</section>
+<!-- home us section ends -->
+<div class="divider-2" id="about-section">
+  <img src="https://scontent.fmnl30-2.fna.fbcdn.net/v/t1.15752-9/441013683_843918910884241_639309402510412051_n.png?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGOF8CIOcTtvt5_e4H_0OBADgSMEGvYOK0OBIwQa9g4rf3nqdpxBvuJ5wlm1rgQzxlmUK0CDQ0cKsHihGXul1aJ&_nc_ohc=GZEdiGG_5yUQ7kNvgGr0TTO&_nc_ht=scontent.fmnl30-2.fna&oh=03_Q7cD1QEoiITKksyWGzo4uQgLbsPsm5ohwsh0xmsLqmORtBITpA&oe=666D4771" style="max-height: 250px; width: 100%;">
+</div>
+      <!-- About us section starts -->
+
+      <section class="about">
+        <div class="row">
+            <div class="video-container">
+                <video src="https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/rhQ9KW0C9l71kd5z0/videoblocks-colorful-balls-of-wool-thread-for-knitting-closeu-2022-08-04-07-08-00-utc_3_r2s7jb6yn__89ebb0c8c192e063cdaf39f72974f680__P360.mp4" loop autoplay muted>
+                    <!-- Fallback content in case video doesn't load -->
+                    Your browser does not support HTML5 video.
+                </video>
+                <h3>Nakaka reminisce</h3>
+            </div>
+            <div class="content">
+                <div class="hover-box">
+                    <h3>Why Choose Us? (hahaha why choose us dw ako nalang sna)</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis tempus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis tempus massa.</p>
+                    <p>kailangan ko nalang tanggapin hhahaha</p>
+                    <p>masakit ba? hahahha syempre (san bako nagkulang) (ano ba kailangan ko ayusin) </p>
+                    <p>Lorem ipsum dolor sit amet, "hirapmakamoveon pre" consectetur adipiscing elit. Vestibulum quis tempus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis tempus massa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+      <!-- About us section ends -->
+
+      <div class="divider-3">
+        <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/441042682_454480570399369_4480648320073542900_n.png?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeF8zmJLYhNPaq1p6nyvcoG6TOCdw8E5-gFM4J3DwTn6AViis79bsdQ106uG9G88ZNwhpUsgHLzMk0Kdid0YK1uQ&_nc_ohc=uHNUtkwGJk0Q7kNvgFFAwCB&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_Q7cD1QGiGYCcDz_b5pQJig2TRZQOubGmll5NeXudfO97NbLjsA&oe=666D1ED2" style="max-height: 250px; width: 100%;">
+    </div>
+
+      <!-- shop us section starts -->
+      <section id="shop-section">
+        <div class="search-container">
+          <input type="text" class="search-input" placeholder="Search... searching parin ng kasiyahan">
+          <button class="search-button"><i class="fas fa-search"></i></button>
+        </div>
+ 
+        <!-- Clothing Category -->
+  <div class="category" id="clothing">
+    <h1 class="category-title">when kaya?</h1>
+    <div class="product-container">
+      <div class="product">
+        <div class="product-info">
+          <img src="https://i.ebayimg.com/images/g/3F4AAOSwcKBl-ziR/s-l1200.jpg" alt="Product Image" class="product-image">
+          <div>
+            <h3>wala na hahaha ano na gagawin ko</h3>
+            <p class="product-price">$19.99</p>
+            <div class="description">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis tempus massa.</p>
+              <div class="star-container">
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="add-to-cart-container">
+          <button class="add-to-cart" onclick="addToCart(this)">Add to Cart</button>
+          <button class="buy-product">Buy Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-container">
+    <div class="product">
+      <div class="product-info">
+        <img src="https://i.ebayimg.com/images/g/3F4AAOSwcKBl-ziR/s-l1200.jpg" alt="Product Image" class="product-image">
+        <div>
+          <h3>Jacket (2)</h3>
+          <p class="product-price">$9.99</p>
+          <div class="description">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis tempus massa.</p>
+            <div class="star-container">
+              <button class="star" onclick="rateProduct(this)">★</button>
+              <button class="star" onclick="rateProduct(this)">★</button>
+              <button class="star" onclick="rateProduct(this)">★</button>
+              <button class="star" onclick="rateProduct(this)">★</button>
+              <button class="star" onclick="rateProduct(this)">★</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="add-to-cart-container">
+        <button class="add-to-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="buy-product">Buy Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shoes Category -->
+  <div class="category" id="shoes">
+    <h2 class="category-title">Shoe</h2>
+    <div class="product-container">
+      <div class="product">
+        <div class="product-info">
+          <img src="https://dynamic.zacdn.com/GasRItBPAIbIA1GI_q7KtRRRmYA=/filters:quality(70):format(webp)/https://static-ph.zacdn.com/p/otto-8471-8395282-1.jpg" alt="Product Image" class="product-image">
+          <div>
+            <h3>Sneakers (1)</h3>
+            <p class="product-price">$59.99</p>
+            <div class="description">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis tempus massa.</p>
+              <div class="star-container">
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="add-to-cart-container">
+          <button class="add-to-cart" onclick="addToCart(this)">Add to Cart</button>
+          <button class="buy-product">Buy Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="product-container">
+  <div class="product">
+    <div class="product-info">
+      <img src="https://dynamic.zacdn.com/GasRItBPAIbIA1GI_q7KtRRRmYA=/filters:quality(70):format(webp)/https://static-ph.zacdn.com/p/otto-8471-8395282-1.jpg" alt="Product Image" class="product-image">
+      <div>
+        <h3>Sneakers (2)</h3>
+        <p class="product-price">$49.99</p>
+        <div class="description">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis tempus massa.</p>
+          <div class="star-container">
+            <button class="star" onclick="rateProduct(this)">★</button>
+            <button class="star" onclick="rateProduct(this)">★</button>
+            <button class="star" onclick="rateProduct(this)">★</button>
+            <button class="star" onclick="rateProduct(this)">★</button>
+            <button class="star" onclick="rateProduct(this)">★</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="add-to-cart-container">
+      <button class="add-to-cart" onclick="addToCart(this)">Add to Cart</button>
+      <button class="buy-product">Buy Product</button>
+    </div>
+  </div>
+</div>
+
+  <!-- Shoes Category -->
+  <div class="category" id="shoes">
+    <h3 class="category-title">Jacket</h3>
+    <div class="product-container">
+      <div class="product">
+        <div class="product-info">
+          <img src="https://dynamic.zacdn.com/GasRItBPAIbIA1GI_q7KtRRRmYA=/filters:quality(70):format(webp)/https://static-ph.zacdn.com/p/otto-8471-8395282-1.jpg" alt="Product Image" class="product-image">
+          <div>
+            <h3>Sneakers (1)</h3>
+            <p class="product-price">$59.99</p>
+            <div class="description">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis tempus massa.</p>
+              <div class="star-container">
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+                <button class="star" onclick="rateProduct(this)">★</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="add-to-cart-container">
+          <button class="add-to-cart" onclick="addToCart(this)">Add to Cart</button>
+          <button class="buy-product">Buy Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="product-container">
+  <div class="product">
+    <div class="product-info">
+      <img src="https://dynamic.zacdn.com/GasRItBPAIbIA1GI_q7KtRRRmYA=/filters:quality(70):format(webp)/https://static-ph.zacdn.com/p/otto-8471-8395282-1.jpg" alt="Product Image" class="product-image">
+      <div>
+        <h3>Sneakers (2)</h3>
+        <p class="product-price">$49.99</p>
+        <div class="description">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis tempus massa.</p>
+          <div class="star-container">
+            <button class="star" onclick="rateProduct(this)">★</button>
+            <button class="star" onclick="rateProduct(this)">★</button>
+            <button class="star" onclick="rateProduct(this)">★</button>
+            <button class="star" onclick="rateProduct(this)">★</button>
+            <button class="star" onclick="rateProduct(this)">★</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="add-to-cart-container">
+      <button class="add-to-cart" onclick="addToCart(this)">Add to Cart</button>
+      <button class="buy-product">Buy Product</button>
+    </div>
+  </div>
+</div>
+  <!-- shop us section ends -->
+
+  <!-- footer section starts -->
+  <div class="ocean" id="footer">
+    <div class="wave"></div>
+    <div class="wave2"></div>
+    <div class="wave3"></div>
+    <div class="wave4"></div>
+  </div>
+  <div class="wave-content">
+    <div class="wave-container">
+      <h2>Balik tayo sa dati hahahaha</h2>
+      <div class="contact-icons">
+        <a href="#home-section" class="footerbuttons"><i class="fas fa-home"></i> Home (sana may ganito din ako)</a>
+        <a href="#Features-section" class="footerbuttons"><i class="fas fa-server"></i> Features</a>
+        <a href="#about-section" class="footerbuttons"><i class="fas fa-info-circle"></i> About</a>
+      </div>
+      <div class="contact-info">
+        <p><i class="fas fa-map-marker-alt"></i> ayoss nasasaktan nako dito oh</p>
+        <p><i class="fas fa-phone"></i> +1 (123) 456-7890</p>
+        <p><i class="fas fa-envelope"></i> andreijulian10@gmail.com</p>
+      </div>
+      <p>© 2024 Your Website. All rights reserved.</p>
+    </div>
+  </div>
+  
+  <div class="blue-cover"></div>
+  <!-- footer section ends -->
+
+ <!-- custom designs -->
+  <div class="cart-product">
+    <img src="product-image.jpg">
+    <div class="product-details">
+        <h3 class="product-name">Product Name</h3>
+        <p class="product-description">Product Description Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> <!-- Include the description here -->
+        <div class="quantity-container">
+            <button class="quantity-btn decrease-btn" onclick="updateQuantity(this, -1)">-</button>
+            <span class="quantity-value">1</span>
+            <button class="quantity-btn increase-btn" onclick="updateQuantity(this, 1)">+</button>
+        </div>
+        <span class="product-price">$20.00</span>
+        <button class="remove-item" onclick="removeItem(this)">Remove</button>
+        <button class="buy-cart">Buy Product</button>
+    </div>
+</div>
+
+<div id="custom-alert" class="custom-alert">
+  <div class="custom-alert-content">
+      <span id="custom-alert-message"></span>
+      <button id="custom-alert-ok">OK</button>
+  </div>
+</div>
+ <!-- custom designs -->
+
+
+  
+  <script>
+     /*new*/
+     var cartCloseButton = document.getElementById('cart-close-button');
+var userCloseButton = document.getElementById('user-close-button');
+
+cartCloseButton.addEventListener('click', function(event) {
+    event.stopPropagation(); // Prevent the event from reaching the document click listener
+    document.getElementById('cart-container').style.display = 'none';
+    resetZIndex(); // Reset z-index when cart container is closed
+});
+
+userCloseButton.addEventListener('click', function(event) {
+    event.stopPropagation(); // Prevent the event from reaching the document click listener
+    var userContainer = document.getElementById('user-container');
+    userContainer.style.display = 'none';
+    userContainer.style.zIndex = 'initial'; // Reset z-index when user container is closed
+});
+
+function resetZIndex() {
+    var userContainer = document.getElementById('user-container');
+    userContainer.style.zIndex = 'initial'; // Reset z-index when cart container is closed
+}
+
+// Function to add a product to the cart
+function addToCart(button) {
+    var cartContainer = document.getElementById('cart-container');
+    var productContainer = button.closest('.product-container');
+    var productName = productContainer.querySelector('.product-info h3').innerText;
+    var productPrice = parseFloat(productContainer.querySelector('.product-info .product-price').innerText.replace('$', ''));
+    var productImage = productContainer.querySelector('.product-info .product-image').src;
+    var productDescription = productContainer.querySelector('.product-info .description p').innerText;
+
+    var cartProduct = document.createElement('div');
+    cartProduct.classList.add('cart-product');
+    cartProduct.innerHTML = `
+        <img src="${productImage}" alt="Product Image">
+        <div class="product-details">
+            <h3 class="product-name">${productName}</h3>
+            <p class="product-description">${productDescription}</p>
+            <div class="quantity-container">
+                <button class="quantity-btn decrease-btn">-</button>
+                <span class="quantity-value">1</span>
+                <button class="quantity-btn increase-btn">+</button>
+            </div>
+            <span class="product-price">$${productPrice.toFixed(2)}</span>
+            <button class="buy-cart">Buy Product</button> <!-- Added Buy Product button -->
+            <button class="remove-item">Remove</button>
+        </div>
+    `;
+
+    cartContainer.appendChild(cartProduct);
+
+    // Update cart icon to indicate item added
+    var cartNotification = document.getElementById('cart-notification');
+    var currentCount = parseInt(cartNotification.innerText);
+    cartNotification.innerText = currentCount + 1;
+
+    // Temporarily change button text to "Added to Cart"
+    button.innerText = 'Added to Cart';
+    setTimeout(function() {
+        button.innerText = 'Add to Cart';
+    }, 500); // Change back to "Add to Cart" after 0.5 seconds
+
+    // Add event listener for the remove button in the newly added cart product
+    var removeButton = cartProduct.querySelector('.remove-item');
+    removeButton.addEventListener('click', function() {
+        cartProduct.remove();
+    });
+
+    // Add event listeners for quantity buttons in the newly added cart product
+    var decreaseButton = cartProduct.querySelector('.decrease-btn');
+    var increaseButton = cartProduct.querySelector('.increase-btn');
+    var quantityValue = cartProduct.querySelector('.quantity-value');
+
+    decreaseButton.addEventListener('click', function() {
+        var quantity = parseInt(quantityValue.innerText);
+        if (quantity > 1) {
+            quantity--;
+            quantityValue.innerText = quantity;
+        }
+    });
+
+    increaseButton.addEventListener('click', function() {
+        var quantity = parseInt(quantityValue.innerText);
+        quantity++;
+        quantityValue.innerText = quantity;
+    });
+}
+
+// Event listener for cart icon click
+var cartIcon = document.getElementById('cart-icon');
+var cartContainer = document.getElementById('cart-container');
+var userIcon = document.getElementById('user-icon');
+var userContainer = document.getElementById('user-container');
+
+cartIcon.addEventListener('click', function() {
+    cartContainer.style.display = 'block';
+    userContainer.style.display = 'none';
+    // Reset cart notification to zero when cart container is opened
+    var cartNotification = document.getElementById('cart-notification');
+    cartNotification.innerText = '0';
+});
+
+// Event listener for user icon click
+userIcon.addEventListener('click', function() {
+    userContainer.style.display = 'block';
+    cartContainer.style.display = 'none';
+});
+
+
+
+ /*new*/
+function rateProduct(starCount, containerIndex) {
+  const stars = document.querySelectorAll('.product-container')[containerIndex].querySelectorAll('.star');
+  for (let i = 0; i < starCount; i++) {
+    stars[i].style.color = '#ffcc00'; // Set color to yellow for selected stars
+    stars[i].classList.add('party'); // Add party animation class
+  }
+  for (let i = starCount; i < stars.length; i++) {
+    stars[i].style.color = '#ccc'; // Set color back to gray for remaining stars
+    stars[i].classList.remove('party'); // Remove party animation class
+  }
+}
+
+// JavaScript for rating products
+function rateProduct(clickedStar) {
+  const stars = clickedStar.parentElement.querySelectorAll('.star');
+  const clickedIndex = Array.from(stars).indexOf(clickedStar) + 1; // Adding 1 for 1-based indexing
+  stars.forEach((star, index) => {
+    if (index < clickedIndex) {
+      star.classList.add('party'); // Add party animation class
+      star.style.color = '#ffcc00'; // Set color to yellow for clicked and left stars
+    } else {
+      star.classList.remove('party'); // Remove party animation class
+      star.style.color = '#ccc'; // Set color back to gray for right stars
+    }
+  });
+}
+
+// Adding event listeners to each star for hover effect
+document.querySelectorAll('.product-container .star').forEach(star => {
+  star.addEventListener('mouseenter', function() {
+    // Check if the star is clicked, if yes, return
+    if (this.classList.contains('clicked')) return;
+    
+    const stars = this.parentElement.querySelectorAll('.star');
+    const hoveredIndex = Array.from(this.parentElement.children).indexOf(this);
+    stars.forEach((star, index) => {
+      if (!star.classList.contains('clicked') && index <= hoveredIndex) {
+        star.style.color = '#ffcc00'; // Set color to yellow for hovered and left stars if not clicked
+      }
+    });
+  });
+
+  document.querySelectorAll('.product-container .star').forEach(star => {
+  let isRated = false;
+
+  star.addEventListener('mouseenter', function() {
+    if (isRated) return;
+
+    const stars = this.parentElement.querySelectorAll('.star');
+    const hoveredIndex = Array.from(this.parentElement.children).indexOf(this);
+    stars.forEach((star, index) => {
+      if (index <= hoveredIndex) {
+        star.style.color = '#ffcc00';
+      }
+    });
+  });
+
+  star.addEventListener('mouseleave', function() {
+    if (isRated) return;
+
+    const stars = this.parentElement.querySelectorAll('.star');
+    stars.forEach(star => {
+      if (!star.classList.contains('clicked')) {
+        star.style.color = '#ccc';
+      }
+    });
+  });
+
+  star.addEventListener('click', function() {
+    if (isRated) return;
+
+    const stars = this.parentElement.querySelectorAll('.star');
+    const clickedIndex = Array.from(this.parentElement.children).indexOf(this);
+    stars.forEach((star, index) => {
+      if (index <= clickedIndex) {
+        star.classList.add('party', 'clicked');
+        star.style.color = '#ffcc00';
+      } else {
+        star.classList.remove('party', 'clicked');
+        star.style.color = '#ccc';
+      }
+    });
+
+    isRated = true;
+
+    // Remove hover event listeners after rating to prevent color changes
+    stars.forEach(star => {
+      star.removeEventListener('mouseenter', null);
+      star.removeEventListener('mouseleave', null);
+    });
+  });
+});
+
+  // Add click event listener to mark the star as clicked
+  star.addEventListener('click', function() {
+    // Add a class to mark the star as clicked
+    this.classList.add('clicked');
+    // Set the color to yellow for clicked star and gray for others
+    const stars = this.parentElement.querySelectorAll('.star');
+    stars.forEach((star, index) => {
+      if (index <= Array.from(this.parentElement.children).indexOf(this)) {
+        star.style.color = '#ffcc00';
+      } else {
+        star.style.color = '#ccc';
+      }
+    });
+  });
+});
+
+
+
+/*new*/
+document.querySelector('.search-button').addEventListener('click', performSearch);
+document.querySelector('.search-input').addEventListener('keypress', function(event) {
+  if (event.key === 'Enter') {
+    performSearch();
+  }
+});
+
+function performSearch() {
+  const searchTerm = document.querySelector('.search-input').value.trim().toLowerCase();
+  const categories = document.querySelectorAll('.category');
+  let found = false;
+
+  categories.forEach(category => {
+    const headings = category.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    headings.forEach(heading => {
+      const headingText = heading.textContent.trim().toLowerCase();
+      if (headingText.includes(searchTerm)) {
+        // Scroll to the category
+        category.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        found = true;
+
+        // After scrolling, adjust the scroll position to make sure the category title is above the input field
+        const inputRect = document.querySelector('.search-container').getBoundingClientRect();
+        const categoryRect = category.getBoundingClientRect();
+        const offset = categoryRect.top - inputRect.height;
+        window.scrollBy({ top: offset, behavior: 'smooth' });
+
+        // Exit the loop once found
+        return;
+      }
+    });
+  });
+
+  if (!found) {
+    showAlert('No matching heading found');
+  }
+}
+
+function showAlert(message) {
+  alert(message);
+}
+
+/*new*/
+document.addEventListener("DOMContentLoaded", function() {
+    const userContainer = document.getElementById('user-container');
+    const closeButton = document.getElementById('user-close-button');
+    const emailInput = document.getElementById('email-input');
+    const saveButton = document.getElementById('save-button');
+
+    // Load saved email from localStorage
+    const savedEmail = localStorage.getItem('userEmail');
+    if (savedEmail) {
+        emailInput.value = savedEmail;
+    }
+
+    closeButton.addEventListener('click', function() {
+        userContainer.style.display = 'none';
+    });
+
+    saveButton.addEventListener('click', function() {
+        saveEmail();
+    });
+
+    // Function to save email
+    function saveEmail() {
+        const email = emailInput.value;
+        if (email) {
+            localStorage.setItem('userEmail', email);
+            showAlert('Email saved: ' + email);
+        }
+    }
+
+    // Listen for Enter key press on email input field
+    emailInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            saveEmail();
+        }
+    });
+});
+/*new*/
+// Function to show custom alert
+function showAlert(message) {
+    document.getElementById('custom-alert-message').textContent = message;
+    document.getElementById('custom-alert').style.display = 'block';
+}
+
+// Function to hide custom alert
+function hideAlert() {
+    document.getElementById('custom-alert').style.display = 'none';
+}
+
+// Event listener for OK button click
+document.getElementById('custom-alert-ok').addEventListener('click', hideAlert);
+
+/*new*/
+  // Function to scroll to the specified element smoothly
+  function scrollToElement(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  // Add event listeners to navigation links
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function(event) {
+      // Prevent the default behavior of the link
+      event.preventDefault();
+      // Extract the ID of the target section from the href attribute
+      const targetId = this.getAttribute('href').substring(1);
+      // Scroll to the target section
+      scrollToElement(targetId);
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+  const scrollLinks = document.querySelectorAll('.footerbuttons');
+
+  scrollLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const id = this.getAttribute('href').substring(1);
+      const section = document.getElementById(id);
+
+      if (section) {
+        section.scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+});
+
+  function scrollToFooter() {
+    const footer = document.getElementById('footer');
+    footer.scrollIntoView({ behavior: 'smooth' });
+  }
+  
+  function scrollToShopSection() {
+    smoothScroll('#shop-section');
+}
+
+function smoothScroll(targetId) {
+    document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+}
+
+</script>
+
+
+
+
+</body>
+</html>
